@@ -21,51 +21,9 @@ module.exports = function (sails) {
             Mixed: true
         },
         __configKey__: {
-
             plugins: { },
             connections: { },
             schemasLocation: "./api/schemas"
-
-            /*
-            plugins: {
-                pluginToRequire: true, // inyecta este plugin en todos los eschemes
-                pluginToRequire2: {/*plugin options* /},   // inyecta este plugin en todos los eschemes con esas opciones
-                doWhatEverYouWantWithTheSchema: function(schema){
-
-                }   // inyeccion manual del plugin
-            },
-
-            schemasLocation: "/api/schemas/",
-
-            /* Listado de conextiones a crear, si solo existe "default" se puede omitir
-             connection: {
-                 uri: "ds039351.mongolab.com",
-                 options: {
-                     database: "jhipster",
-                     port: 39351,
-                     user: 'jhipster',
-                     pass: 'jhipster'
-                 },
-                 wrap: false, // hace los schemas globales
-                 schemasLocation: "/api/schemas/" + connectionName
-                 plugins: {
-                    pluginToRequire: false // evita que 'pluginToRequire' se inyecte
-                 } // hace un merge con la opcion "plugins" de arriba
-             }
-            * /
-            connections: {
-                default: {
-                    ... es connection, ver arriba
-                },
-                certtwit: {
-                    uri: "ds043158.mongolab.com",
-                    wrap: "mongo", // hace los schemas disponibles bajo "mongo", por defecto el nombre de la conexion
-                    options: {
-                        ...
-                    }
-                }
-            }
-            */
         }
     };
 
@@ -77,30 +35,20 @@ module.exports = function (sails) {
             config.connections.default = config.connection;
         }
 
-        if(config.connections.default.wrap === undefined) {
+        if(config.connections.default && config.connections.default.wrap === undefined) {
             config.connections.default.wrap = false;
         }
 
-        // plugin array to object
-        if(_.isArray(config.plugins)) {
-            var plugins =  {};
-            _.forEach(config.plugins, function(val){plugins[val] = true});
-            config.plugins = plugins;
-        }
+        // config plugins array to object
+        arrayPluginToObject(config.plugins);
 
         _.forIn(config.connections, function(connection, connectionName) {
 
-            // plugin array to object
-            if(_.isArray(connection.plugins)) {
-                var connectionPlugins =  {};
-                _.forEach(connection.plugins, function(val){connectionPlugins[val] = true});
-                connection.plugins = connectionPlugins;
-            }
+            // connection plugin array to object
+            arrayPluginToObject(connection.plugins);
 
-            // extend plugin information
-            var plugins = {};
-            _.assign(plugins, config.plugins, connection.plugins);
-            connection.plugins = plugins;
+            // extend config and connection plugin information
+            connection.plugins = _.assign({}, config.plugins, connection.plugins);
 
             // schema location
             var folderName = '/' + connectionName;
@@ -118,7 +66,18 @@ module.exports = function (sails) {
             global.ObjectId = mongoose.Schema.Types.ObjectId;
         if(sails.config.mongoose)
             global.mongoose = mongoose;
+
     };
+
+    function arrayPluginToObject(plugins) {
+        if(_.isArray(plugins)) {
+            var tmp_plugins =  {};
+            _.forEach(plugins, function(val){tmp_plugins[val] = true});
+            plugins = tmp_plugins;
+        }
+
+        return plugins;
+    }
 
 
     var initialize = function(cb) {
