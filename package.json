@@ -1,6 +1,6 @@
 {
   "name": "sails-hook-mongoose",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "Highfredo",
     "email": "highfredo@gmail.com"
@@ -22,8 +22,8 @@
     "url": "https://github.com/highfredo/sails-hook-mongoose/issues"
   },
   "engines": {
-    "node": ">= 0.10.0",
-    "npm": ">= 1.4.0"
+    "node": ">= 4.0.0",
+    "npm": ">= 2.0.0"
   },
   "description": "Sails hook for mongoose",
   "main": "index.js",
@@ -31,12 +31,11 @@
     "isHook": true
   },
   "dependencies": {
-    "bluebird": "^2.9.34",
-    "glob": "^5.0.14",
-    "lodash": "^3.10.1",
-    "mongoose": "^4.1.5"
+    "glob": "^7.1.1",
+    "lodash": "^4.16.6",
+    "mongoose": "^4.6.5"
   },
   "devDependencies": {
-    "sails": "^0.11.0"
+    "sails": "^0.12.8"
   }
 }
