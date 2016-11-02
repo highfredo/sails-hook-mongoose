@@ -60,11 +60,11 @@ module.exports = function (sails) {
 
 
 
-        if(sails.config.Mixed)
+        if(sails.config.globals.Mixed)
             global.Mixed = mongoose.Schema.Types.Mixed;
-        if(sails.config.ObjectId)
+        if(sails.config.globals.ObjectId)
             global.ObjectId = mongoose.Schema.Types.ObjectId;
-        if(sails.config.mongoose)
+        if(sails.config.globals.mongoose)
             global.mongoose = mongoose;
 
     };
